@@ -1,6 +1,5 @@
 using Mirror;
 using MP.Common;
-using MP.Common.UI;
 using MP.Game.Players.UI;
 using MP.Game.UI;
 using UnityEngine;

@@ -1,8 +1,7 @@
-using Mirror;
 using UnityEngine;
 
 
-namespace MP.View.Movements
+namespace MP.Game.Movements
 {
     public class PlayerRotation : MonoBehaviour
     {

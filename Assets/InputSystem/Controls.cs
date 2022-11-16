@@ -61,7 +61,7 @@ namespace MP.InputSystems
                 {
                     ""name"": """",
                     ""id"": ""ddce3593-4863-4d66-8fba-3588f332aa27"",
-                    ""path"": ""<Mouse>/rightButton"",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

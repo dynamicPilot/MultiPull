@@ -1,9 +1,8 @@
-using Mirror;
 using MP.InputSystems;
-using MP.View.Input.Interfaces;
+using MP.Game.Input.Interfaces;
 using UnityEngine;
 
-namespace MP.View.Input
+namespace MP.Game.Input
 { 
     public class InputControls : MonoBehaviour, IGetMoveValue, IPullPerformed
     {

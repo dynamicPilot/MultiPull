@@ -1,11 +1,11 @@
 using Mirror;
 using MP.Common;
 using MP.Game.Players;
-using MP.View.Input;
+using MP.Game.Input;
 using System;
 using UnityEngine;
 
-namespace MP.View.Movements
+namespace MP.Game.Movements
 {
     [RequireComponent(typeof(NetworkTransform))]
     public class PlayerMovement : NetworkBehaviour

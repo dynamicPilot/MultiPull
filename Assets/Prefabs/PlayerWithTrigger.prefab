@@ -429,7 +429,7 @@ MonoBehaviour:
   syncInterval: 0.1
   _sceneData: {fileID: 11400000, guid: 9112307d2f2c85945b1ea62abd4a7712, type: 2}
   _collider: {fileID: 7049733740871004138}
-  Available: 1
+  IsRestarting: 0
 --- !u!114 &7802778975721091208
 MonoBehaviour:
   m_ObjectHideFlags: 0

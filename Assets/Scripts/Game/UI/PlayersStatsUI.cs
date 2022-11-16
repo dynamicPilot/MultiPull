@@ -1,9 +1,4 @@
-using Mirror;
 using MP.Common;
-using MP.Common.UI;
-using MP.Game.Players;
-using MP.Manager;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,7 +8,6 @@ namespace MP.Game.UI
     {
         [SerializeField] private StaticSceneData _sceneData;
         [SerializeField] private Transform _slotsParent;
-        [SerializeField] private EndGameUI _endGameUI;
 
         private IDictionary<int, PlayerStatsSlotUI> _slots = new Dictionary<int, PlayerStatsSlotUI>();
 
@@ -21,38 +15,6 @@ namespace MP.Game.UI
         {
             _slotsParent.gameObject.SetActive(true);
         }
-
-        //private void Start()
-        //{
-        //    if (NetworkManager.singleton is NetworkRoomManagerExtended room)
-        //        CreateSlotsForPlayers(room.Players.ToArray());
-        //}
-
-        //public void CreateSlotsForPlayers(PlayerStats[] playersStats)
-        //{
-        //    Debug.Log("Create slots for players " + playersStats.Length);
-        //    for (int i = 0; i < playersStats.Length; i++)
-        //    {
-        //        AddSlotForPlayer(playersStats[i].Index, playersStats[i].PlayerName);
-        //    }
-        //}
-
-        //public void AddSlotForPlayer(int index, string playerName)
-        //{
-        //    PlayerStatsSlotUI slot = CreateSlot();
-        //    slot.SetSlot(playerName, false);
-        //    _slots.Add(index, slot);
-        //}
-
-        //private void Start()
-        //{
-        //    _endGameUI.OnEndGameStart += OnEndGameStart;
-        //}
-
-        //private void OnDestroy()
-        //{
-        //    _endGameUI.OnEndGameStart -= OnEndGameStart;
-        //}
 
         public int AddSlotForPlayer(string playerName, bool isLocalPlayer)
         {

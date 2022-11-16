@@ -1,11 +1,9 @@
 using UnityEngine;
 
-namespace MP.View.Input.Interfaces
+namespace MP.Game.Input.Interfaces
 {
     public interface IGetMoveValue
     {
-        //delegate void MovePerformed(Vector2 delta);
-        //event MovePerformed OnMovePerformed;
         Vector2 GetMoveValue();
     }
 

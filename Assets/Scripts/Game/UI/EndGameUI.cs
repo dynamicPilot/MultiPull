@@ -1,8 +1,9 @@
+using MP.Common;
 using TMPro;
 using UnityEngine;
 
 
-namespace MP.Common.UI
+namespace MP.Game.UI
 {
     public class EndGameUI : MonoBehaviour
     {
