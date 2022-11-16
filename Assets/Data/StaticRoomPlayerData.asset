@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0d91de43ffecc44ba2e0723beae16de, type: 3}
+  m_Name: StaticRoomPlayerData
+  m_EditorClassIdentifier: 
+  ReadyColor: {r: 0.70980394, g: 0.05882353, b: 0.24313726, a: 1}
+  NotReadyColor: {r: 0.21176471, g: 0.16862746, b: 0.22352941, a: 1}
+  NotReadyText: Are you ready, {0}?
+  ReadyText: Okay! Just wait a minute ...
