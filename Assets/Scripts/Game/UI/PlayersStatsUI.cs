@@ -16,13 +16,13 @@ namespace MP.Game.UI
             _slotsParent.gameObject.SetActive(true);
         }
 
-        public int AddSlotForPlayer(string playerName, bool isLocalPlayer)
+        public int AddSlotForPlayer(string playerName)
         {
 
             PlayerStatsSlotUI slot = CreateSlot();
 
             int index = _slots.Count;
-            slot.SetSlot(playerName, isLocalPlayer);
+            slot.SetSlot(playerName);
             _slots.Add(index, slot);
 
             if (!_slotsParent.gameObject.activeSelf) _slotsParent.gameObject.SetActive(true);

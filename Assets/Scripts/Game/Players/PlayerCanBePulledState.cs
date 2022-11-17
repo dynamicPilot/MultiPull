@@ -10,7 +10,7 @@ namespace MP.Game.Players
         [SerializeField] private StaticGamePlayerData _playerData;
         [SerializeField] private PlayerColor _playerColor;
 
-        [SyncVar]
+        [SyncVar(hook = nameof(SyncCanBePulled))]
         public bool CanBePulled = true;
 
         private void OnValidate()
@@ -21,6 +21,11 @@ namespace MP.Game.Players
         public override void OnStopLocalPlayer()
         {
             StopAllCoroutines();
+        }
+
+        public void SyncCanBePulled(bool oldValue, bool newValue)
+        {
+            Debug.Log("Can be pulled changed from " + oldValue +" to " + newValue);
         }
 
         [ServerCallback]

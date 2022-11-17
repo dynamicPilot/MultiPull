@@ -1,4 +1,5 @@
 using Mirror;
+using MP.Common;
 using MP.Manager;
 using MP.Room.UI;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace MP.Room.UI
         [SerializeField] private GameObject _joinPanel;
         [SerializeField] private GameObject _rolePanel;
         [SerializeField] private GameObject _errorPanel;
+
 
         private void Start()
         {

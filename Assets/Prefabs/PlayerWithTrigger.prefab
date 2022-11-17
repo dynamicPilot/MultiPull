@@ -362,12 +362,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncDirection: 0
   syncMode: 0
-  syncInterval: 0.1
+  syncInterval: 0.05
   _inputControls: {fileID: 3876209272685642981}
   _playerRotation: {fileID: 260899745209546621}
   _playerPullState: {fileID: 1479590366862974269}
   _playerData: {fileID: 11400000, guid: 1701e678fe0945948b96cc0cf5cdd98d, type: 2}
   _minMoveDirectionValue: 0.1
+  _pullWillContinueFor: 20
+  StartPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &260899745209546621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -462,7 +464,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncDirection: 1
   syncMode: 0
-  syncInterval: 0.1
+  syncInterval: 0
   InAPull: 0
 --- !u!114 &3704722001045989050
 MonoBehaviour:
@@ -504,7 +506,6 @@ MonoBehaviour:
   PlayerName: 
   IsWinner: 0
   InRestart: 0
-  Index: 0
 --- !u!114 &5051573132919751334
 MonoBehaviour:
   m_ObjectHideFlags: 0

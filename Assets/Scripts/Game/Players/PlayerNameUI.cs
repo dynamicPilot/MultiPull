@@ -1,7 +1,5 @@
-using Mirror;
 using TMPro;
 using UnityEngine;
-
 
 namespace MP.Game.Players.UI
 {
@@ -23,6 +21,7 @@ namespace MP.Game.Players.UI
         public void SetPlayerName(string playerName)
         {
             _text.text = playerName;
+            
             SetViewActiveState(true);
         }
     }

@@ -1,3 +1,4 @@
+using MP.Common;
 using MP.Room.UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,14 +11,9 @@ namespace MP.Room.UI
         [SerializeField] private UserInputFieldUI _inputFieldUI;
         [SerializeField] private Button _continueButton;
         [SerializeField] private GameObject _playerNamePanel;
-        [SerializeField] private string _nameKey = "PlayerName";
+        [SerializeField] private StaticSceneData _sceneData;
         
 
-        public void LoadNameFromPrefs()
-        {
-            if (PlayerPrefs.HasKey(_nameKey)) _inputFieldUI.SetInputField(PlayerPrefs.GetString(_nameKey));           
-            else _inputFieldUI.SetInputField("");           
-        }
 
         public void SaveNameToPrefs()
         {
@@ -25,7 +21,7 @@ namespace MP.Room.UI
 
             if (string.IsNullOrEmpty(newName)) return;
 
-            PlayerPrefs.SetString(_nameKey, newName);
+            PlayerPrefs.SetString(_sceneData.NameKey, newName);
             _playerNamePanel.SetActive(false);
             _joinUI.ActivateUI();
         }

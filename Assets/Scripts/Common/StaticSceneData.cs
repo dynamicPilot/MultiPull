@@ -19,7 +19,6 @@ namespace MP.Common
         [Header("GameScene UI Parameters")]
         public GameObject StatsSlotPrefab;
         public Color SliderFillColor;
-        public Color SliderFillColorForActivePlayer;
 
         private void OnValidate()
         {

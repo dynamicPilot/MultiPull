@@ -17,14 +17,20 @@ namespace MP.Game.Players
         [ServerCallback]
         void OnTriggerEnter(Collider other)
         {
+            if (other.gameObject.CompareTag("PlayerBody")) Debug.Log("player body");
+
             if (other.gameObject.CompareTag("Player") &&
                 other.gameObject != gameObject)
             {
                 var selfPullState = gameObject.GetComponent<PlayerPullState>();
                 var playerCanBePulledState = other.gameObject.GetComponent<PlayerCanBePulledState>();
 
-                //
-                if (selfPullState != null && selfPullState.InAPull && playerCanBePulledState.CanBePulled)
+                if (playerCanBePulledState == null || selfPullState == null) return;
+
+                if (playerCanBePulledState.CanBePulled) Debug.Log("Can be pulled");
+                else Debug.Log("NOT can be pulled");
+
+                if (selfPullState.InAPull && playerCanBePulledState.CanBePulled)
                     CanNotBePulledStateActivator(playerCanBePulledState);
             }
         }

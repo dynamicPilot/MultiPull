@@ -14,8 +14,6 @@ namespace MP.Game.UI
         [SerializeField] private Slider _slider;
         [SerializeField] private Image _sliderFill;
 
-        private bool _isLocalPlayer = false;
-
         private void Awake()
         {
             _slider.maxValue = _sceneData.ScoreToWin;
@@ -23,22 +21,19 @@ namespace MP.Game.UI
             _slider.wholeNumbers = true;
         }
 
-        public void SetSlot(string name, bool isLocalPlayer)
+        public void SetSlot(string name)
         {
             Debug.Log("Set slot to " + name);
             _name.text = name;
-            _isLocalPlayer = isLocalPlayer;
 
             _slider.value = _slider.minValue;
 
-            _sliderFill.color = (_isLocalPlayer) ? _sceneData.SliderFillColorForActivePlayer
-                : _sceneData.SliderFillColor;
+            _sliderFill.color = _sceneData.SliderFillColor;
             //gameObject.SetActive(true);
         }
 
         public void UpdateValue(int newValue)
         {
-            Debug.Log("Set slot new value " + newValue);
             if (newValue > _slider.maxValue) newValue = (int) _slider.maxValue;
             _slider.value = newValue;
         }

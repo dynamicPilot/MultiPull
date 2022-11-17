@@ -25,9 +25,6 @@ namespace MP.Game.Players
         [SyncVar(hook = nameof(SyncInRestart))]
         public bool InRestart;
 
-        [SyncVar]
-        public int Index;
-
         private int _slotIndex;
         private void Start()
         {
@@ -58,13 +55,12 @@ namespace MP.Game.Players
             FindGameUI();
         }
 
-
         private void FindGameUI()
         {            
             if (_playerStatsUI != null) return;
             _playerStatsUI = GameObject.FindGameObjectWithTag("GameUI").GetComponent<PlayersStatsUI>();
 
-            _slotIndex = _playerStatsUI.AddSlotForPlayer(PlayerName, false);
+            _slotIndex = _playerStatsUI.AddSlotForPlayer(PlayerName);
         }
     }
 
