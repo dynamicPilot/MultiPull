@@ -8,15 +8,13 @@ So for correct view all players must have performed at least one move in scene.
 
 You may see it in NetworkGamePlayer.cs Script:
 
-```
+```c#
 public void OnClientEnterGame()
         {
             //update owner only
             if (isOwned)
             {
                 transform.position = _movement.StartPosition;
-                //Debug.Log($"OWNER : Change position for {_stats.PlayerName}: " +
-                //                $" new start position {_movement.StartPosition} and actual position is {transform.position}.");
             }
         }
 ```
