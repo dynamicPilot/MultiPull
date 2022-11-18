@@ -1,12 +1,12 @@
 # MultiPull
  Pulling Players game. Made with Unity and Mirror Networking
 
-## Project State Note
+## Project State Note (!)
 
-After game scene restart only start position for isOwned Player is updated.
-So for correct view all players must have performed at least one move in scene.
+After the game scene restart only start position for the isOwned Player is updated.
+So for the correct view all players must have performed at least one move in the scene.
 
-You may see it in NetworkGamePlayer.cs Script:
+You may see it in *NetworkGamePlayer.cs* script:
 
 ```c#
 public void OnClientEnterGame()
