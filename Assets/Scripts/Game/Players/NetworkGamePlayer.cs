@@ -54,7 +54,6 @@ namespace MP.Game.Players
 
         public void OnClientEnterGame()
         {
-
             //update owner only
             if (isOwned)
             {
