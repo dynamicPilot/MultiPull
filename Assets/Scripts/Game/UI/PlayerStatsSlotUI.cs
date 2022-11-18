@@ -23,13 +23,11 @@ namespace MP.Game.UI
 
         public void SetSlot(string name)
         {
-            Debug.Log("Set slot to " + name);
             _name.text = name;
 
             _slider.value = _slider.minValue;
 
             _sliderFill.color = _sceneData.SliderFillColor;
-            //gameObject.SetActive(true);
         }
 
         public void UpdateValue(int newValue)

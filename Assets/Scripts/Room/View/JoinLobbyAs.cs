@@ -1,4 +1,5 @@
 using Mirror;
+using MP.Manager;
 using MP.Room.UI;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace MP.Room.View
         private IJoinLobby _joinLobby;
         public void JoinLobbyWithRole(bool isHost)
         {
-            if (isHost) _joinLobby = new JoinLobbyAsAHost(NetworkManager.singleton, _joinUI);
+            if (isHost) _joinLobby = new JoinLobbyAsAHost(NetworkManager.singleton as NetworkRoomManagerExtended, _joinUI);
             else _joinLobby = new JoinLobbyAsAClient(NetworkManager.singleton, _joinUI);
             JoinLobby();
         }

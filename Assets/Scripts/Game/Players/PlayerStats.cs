@@ -2,6 +2,7 @@ using Mirror;
 using MP.Common;
 using MP.Game.Players.UI;
 using MP.Game.UI;
+using MP.Manager;
 using UnityEngine;
 
 
@@ -19,9 +20,6 @@ namespace MP.Game.Players
         [SyncVar(hook = nameof(SyncName))]
         public string PlayerName;
 
-        [SyncVar(hook = nameof(SyncIsWinner))]
-        public bool IsWinner;
-
         [SyncVar(hook = nameof(SyncInRestart))]
         public bool InRestart;
 
@@ -35,6 +33,8 @@ namespace MP.Game.Players
         {
             if (_playerStatsUI == null) FindGameUI();
             _playerStatsUI.UpdateSlotValue(_slotIndex, newValue);
+
+            if (Score == _sceneData.ScoreToWin) Winner();
         }
 
         private void SyncName(string oldValue, string newValue)
@@ -45,10 +45,11 @@ namespace MP.Game.Players
             _playerStatsUI.UpdatePlayerName(_slotIndex, newValue);
         }
 
-        private void SyncIsWinner(bool oldValue, bool newValue)
+        private void Winner()
         {
-            if (newValue) _playerStatsUI.GetComponent<EndGameUI>().EndGameStart(PlayerName);
+            _playerStatsUI.GetComponent<EndGameUI>().EndGameStart(PlayerName);
         }
+
 
         private void SyncInRestart(bool oldValue, bool newValue)
         {

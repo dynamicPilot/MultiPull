@@ -1,9 +1,7 @@
 using Mirror;
-using MP.Common;
 using MP.Manager;
-using MP.Room.UI;
 using UnityEngine;
-using UnityEngine.UI;
+
 
 namespace MP.Room.UI
 {
@@ -12,7 +10,6 @@ namespace MP.Room.UI
         [SerializeField] private GameObject _joinPanel;
         [SerializeField] private GameObject _rolePanel;
         [SerializeField] private GameObject _errorPanel;
-
 
         private void Start()
         {
@@ -36,12 +33,13 @@ namespace MP.Room.UI
             _rolePanel.SetActive(true);
         }
 
-        public void EndRoleChoice(bool isHost)
+        public void EndRoleChoice(bool isHost, bool isError = false)
         {
             _rolePanel.SetActive(false);
             if (isHost)
             {
                 EndJoin();
+                if (isError) OpenErrorPanel();
                 return;
             }
 

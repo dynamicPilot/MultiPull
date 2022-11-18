@@ -9,7 +9,6 @@ namespace MP.Game.Players
     public class PlayerTrigger : NetworkBehaviour
     {
         [SerializeField] private StaticSceneData _sceneData;
-        [SerializeField] private CapsuleCollider _collider;
 
         [SyncVar]
         public bool IsRestarting = false;
@@ -17,9 +16,8 @@ namespace MP.Game.Players
         [ServerCallback]
         void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.CompareTag("PlayerBody")) Debug.Log("player body");
 
-            if (other.gameObject.CompareTag("Player") &&
+            if ((other.gameObject.CompareTag("Player")  || other.gameObject.CompareTag("PlayerBody")) &&
                 other.gameObject != gameObject)
             {
                 var selfPullState = gameObject.GetComponent<PlayerPullState>();
@@ -27,8 +25,6 @@ namespace MP.Game.Players
 
                 if (playerCanBePulledState == null || selfPullState == null) return;
 
-                if (playerCanBePulledState.CanBePulled) Debug.Log("Can be pulled");
-                else Debug.Log("NOT can be pulled");
 
                 if (selfPullState.InAPull && playerCanBePulledState.CanBePulled)
                     CanNotBePulledStateActivator(playerCanBePulledState);
@@ -47,12 +43,13 @@ namespace MP.Game.Players
                 selfStats.Score++;
                 if (selfStats.Score == _sceneData.ScoreToWin)
                 {
-                    selfStats.IsWinner = true;
+                    //selfStats.IsWinner = true;
                     RestartGame();
                 }
             }
         }
 
+        [Server]
         private void RestartGame()
         {
             if (NetworkManager.singleton is NetworkRoomManagerExtended room)

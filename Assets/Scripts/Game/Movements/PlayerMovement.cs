@@ -4,8 +4,6 @@ using MP.Game.Players;
 using MP.Game.Input;
 using System;
 using UnityEngine;
-using MP.Manager;
-using UnityEngine.UIElements;
 
 namespace MP.Game.Movements
 {
@@ -22,27 +20,21 @@ namespace MP.Game.Movements
         [SerializeField] private float _minMoveDirectionValue = 0.1f;
         [SerializeField] private int _pullWillContinueFor = 50;
 
-        [SyncVar(hook = nameof(SyncStartPosition))]
+        [SyncVar]
         [SerializeField] public Vector3 StartPosition;
 
         CharacterController _characterController = null;
         bool _nextPull = false;
         bool _previousPull = false;
-        bool _forceMove = false;
 
-        Vector3 _forceMovePosition;
         float _angle;
         int _pullDelayCount = 0;
 
-        public override void OnStartClient()
+        public override void OnStartLocalPlayer()
         {
-            if (isLocalPlayer)
-            {
-                Debug.Log("Start Local player");
-                _inputControls.OnPullPerformed += NextMoveIsPull;
-                _characterController = gameObject.AddComponent<CharacterController>();
-                //_characterController.enabled = true;
-            }
+            _inputControls.OnPullPerformed += NextMoveIsPull;
+            _characterController = gameObject.AddComponent<CharacterController>();
+            _characterController.enabled = true;
         }
 
         public override void OnStopLocalPlayer()
@@ -51,26 +43,9 @@ namespace MP.Game.Movements
             _characterController.enabled = false;
             
         }
-        private void SyncStartPosition(Vector3 oldValue, Vector3 newValue)
-        {
-            Debug.Log("SyncStartPosition");
-            ForceMoveToStartPosition();
-        }
-
-        public void ForceMoveToStartPosition()
-        {
-            Debug.Log("ForceMoveToPosition");
-            _forceMove = true;
-            if (_characterController != null) _characterController.enabled = false;
-        }
 
         private void FixedUpdate()
         {
-            if (_forceMove)
-            {
-                ForceMove();
-                return;
-            }
 
             if (!isLocalPlayer || _characterController == null || !_characterController.enabled) return;
 
@@ -89,15 +64,6 @@ namespace MP.Game.Movements
 
             if (_nextPull) MoveIsPull();
 
-        }
-
-        private void ForceMove()
-        {
-            Debug.Log("ForceMove finished");
-            transform.position = StartPosition;
-
-            _forceMove = false;
-            if (_characterController != null) _characterController.enabled = true;
         }
 
         private Tuple<bool,Vector3> CheckDirection(Vector2 moveVector)
@@ -129,7 +95,6 @@ namespace MP.Game.Movements
             _previousPull = true;
             _pullDelayCount = _pullWillContinueFor;
             _playerPullState.CmdInAPullValue(true);
-            Debug.Log("Start Pull");
         }
 
         private void PrevMoveIsPull()
@@ -137,7 +102,6 @@ namespace MP.Game.Movements
             if (_pullDelayCount-- > 0) return;
             _previousPull = false;
             _playerPullState.CmdInAPullValue(false);
-            Debug.Log("Stop Pull");
         }
 
     }

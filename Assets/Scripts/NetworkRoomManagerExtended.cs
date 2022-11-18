@@ -14,21 +14,17 @@ namespace MP.Manager
     {
         public GameObject ReturnToCanvas;
 
-        public List<PlayerStats> Players = new List<PlayerStats>();
-        public List<Vector3> _usedPositions = new List<Vector3>();
+        public List<NetworkGamePlayer> GameSlots = new List<NetworkGamePlayer>();
 
-        public PlayerStats hostPlayer;
         public event Action OnConnectionError;
 
         bool _canStart;
         public bool IsRestarting;
-        bool _firstGameSceneLoad = false;
         public override void OnClientDisconnect()
         {
             OnConnectionError?.Invoke();
             base.OnClientDisconnect();
         }
-
         public override void OnRoomServerPlayersReady()
         {
             UpdateFirstPlayerWhenAllIsReady();
@@ -47,38 +43,37 @@ namespace MP.Manager
         {
             var playerStats = gamePlayer.GetComponent<PlayerStats>();
             var roomPlayerStats = roomPlayer.GetComponent<NetworkRoomPlayerExtended>();
-            _usedPositions.Add(gamePlayer.transform.position);
-
             playerStats.PlayerName = roomPlayerStats.PlayerName;
-            Players.Add(gamePlayer.GetComponent<PlayerStats>());
-
             return true;
         }
 
         public override void OnServerSceneChanged(string sceneName)
         {
-            base.OnServerSceneChanged(sceneName);
-
             if (IsSceneActive(GameplayScene))
             {
-                //if (hostPlayer == null) hostPlayer = NetworkServer.localConnection.identity.gameObject.GetComponent<PlayerStats>();
-                //var movement = hostPlayer.gameObject.GetComponent<PlayerMovement>();
-
-                //hostPlayer.InRestart = !hostPlayer.InRestart;
-                //hostPlayer.Score = 0;
-                //hostPlayer.IsWinner = false;
-                //hostPlayer.GetComponent<PlayerTrigger>().IsRestarting = false;
-                //Vector3 startPos = startPositions[UnityEngine.Random.Range(0, startPositions.Count)].position;
-
-                //while (_usedPositions.Contains(startPos))
-                //    startPos = startPositions[UnityEngine.Random.Range(0, startPositions.Count)].position;
-
-                //_usedPositions.Add(startPos);
-                //movement.StartPosition = startPos;
-                //movement.ForceMoveToStartPosition();
+                OnGameSceneChanged();
             }
+
+            base.OnServerSceneChanged(sceneName);
         }
 
+        private void OnGameSceneChanged()
+        {
+            List<Vector3> usedPositions = new List<Vector3>();
+            List<Vector3> levelStartPosition = new List<Vector3>();
+
+            for (int i = 0; i < GameSlots.Count; i++)
+            {
+                usedPositions.Add(GameSlots[i].GetStartPosition());
+            }
+
+            for (int i = 0; i < GameSlots.Count; i++)
+            {
+                if (GameSlots[i] == null) continue;
+                GameSlots[i].OnGameSceneChanged();
+                
+            }
+        }
 
         public override void OnClientSceneChanged()
         {
@@ -86,58 +81,41 @@ namespace MP.Manager
 
             if (IsSceneActive(GameplayScene))
             {
-                ResetPlayers();
+                if (NetworkClient.isConnected)
+                    CallOnClientEnterGame();
             }
         }
 
-        private void ResetPlayers()
+        internal void CallOnClientEnterGame()
         {
-            if (_firstGameSceneLoad)
-            {
-                _firstGameSceneLoad = false;
-                return;
-            }
+            foreach (NetworkGamePlayer player in GameSlots)
+                if (player != null)
+                {
+                    player.OnClientEnterGame();
+                }
+        }
 
-            Debug.Log("reset players for " + Players.Count);
-            List<int> playersToRemove = new List<int>();
+
+        private void OnGameRestarting()
+        {
+            List<Vector3> usedPositions = new List<Vector3>();
             List<Vector3> levelStartPosition = new List<Vector3>();
 
-            for (int i = 0; i < Players.Count; i++)
+            for (int i = 0; i < GameSlots.Count; i++)
             {
-                if (Players[i] == null)
-                {
-                    playersToRemove.Add(i);
-                    continue;
-                }
-
-                // reset player
-                Players[i].InRestart = !Players[i].InRestart;
-                Players[i].Score = 0;
-                Players[i].IsWinner = false;
-                Players[i].GetComponent<PlayerTrigger>().IsRestarting = false;
-
-                // reset position
-                var movement = Players[i].GetComponent<PlayerMovement>();
-                Vector3 startPos = startPositions[UnityEngine.Random.Range(0, startPositions.Count)].position;
-
-                while (_usedPositions.Contains(startPos) || levelStartPosition.Contains(startPos))
-                    startPos = startPositions[UnityEngine.Random.Range(0, startPositions.Count)].position;
-
-                movement.StartPosition = startPos;
-                levelStartPosition.Add(startPos);
+                usedPositions.Add(GameSlots[i].GetStartPosition());
             }
 
-            if (_firstGameSceneLoad) _firstGameSceneLoad = false;
-            for (int i = 0; i < playersToRemove.Count; i++) Players.RemoveAt(i);
-            _usedPositions.Clear();
-            _usedPositions.AddRange(levelStartPosition);
-        }
-
-        private void BlockPlayers()
-        {
-            for (int i = 0; i < Players.Count; i++)
+            for (int i = 0; i < GameSlots.Count; i++)
             {
-                Players[i].GetComponent<PlayerTrigger>().IsRestarting = false;
+                Vector3 startPos = startPositions[UnityEngine.Random.Range(0, startPositions.Count)].position;
+
+                while (usedPositions.Contains(startPos) || levelStartPosition.Contains(startPos))
+                    startPos = startPositions[UnityEngine.Random.Range(0, startPositions.Count)].position;
+
+                levelStartPosition.Add(startPos);
+
+                GameSlots[i].OnGameRestartingChange(startPos);
             }
         }
         
@@ -147,7 +125,6 @@ namespace MP.Manager
             if (allPlayersReady && _canStart)
             {
                 _canStart = false;
-                _firstGameSceneLoad = true;
                 ServerChangeScene(GameplayScene);
             }
         }
@@ -162,8 +139,6 @@ namespace MP.Manager
         {
             if (IsRestarting) StopAllCoroutines();
 
-            OnRestartGame();
-            return;
             // stop host if host mode
             if (NetworkServer.active && NetworkClient.isConnected)
             {
@@ -183,15 +158,19 @@ namespace MP.Manager
 
         public void RestartGame(float timer)
         {
-            if (IsRestarting) return;
-
+            if (IsRestarting)
+            {
+                Debug.Log("Restarting");
+                return;
+            }
             IsRestarting = true;
-            BlockPlayers();
             StartCoroutine(CountTimeToRestart(timer));
         }
 
         private IEnumerator CountTimeToRestart(float timer)
-        {           
+        {            
+            OnGameRestarting();
+
             yield return new WaitForSeconds(timer);            
             OnRestartGame();
         }
