@@ -10,13 +10,13 @@ You may see it in NetworkGamePlayer.cs Script:
 
 ```c#
 public void OnClientEnterGame()
-        {
-            //update owner only
-            if (isOwned)
-            {
-                transform.position = _movement.StartPosition;
-            }
-        }
+{
+	//update owner only
+	if (isOwned)
+	{
+		transform.position = _movement.StartPosition;
+	}
+}
 ```
 
 
