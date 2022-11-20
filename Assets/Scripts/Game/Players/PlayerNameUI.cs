@@ -24,6 +24,11 @@ namespace MP.Game.Players.UI
             
             SetViewActiveState(true);
         }
+
+        public void CorrectViewPosition(Transform lookAtTarget)
+        {
+            _canvas.transform.LookAt(lookAtTarget);
+        }
     }
 }
 

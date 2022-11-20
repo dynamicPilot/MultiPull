@@ -119,7 +119,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _endGamePanel: {fileID: 9166736436935911918}
   _winnerText: {fileID: 9166736436262758366}
-  _restartCounterText: {fileID: 9166736437055750972}
   _sceneData: {fileID: 11400000, guid: 9112307d2f2c85945b1ea62abd4a7712, type: 2}
 --- !u!114 &3770175799445263768
 MonoBehaviour:
@@ -135,7 +134,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sceneData: {fileID: 11400000, guid: 9112307d2f2c85945b1ea62abd4a7712, type: 2}
   _slotsParent: {fileID: 3770175800832447671}
-  _endGameUI: {fileID: 3770175799445263769}
 --- !u!114 &3950414155533028754
 MonoBehaviour:
   m_ObjectHideFlags: 0

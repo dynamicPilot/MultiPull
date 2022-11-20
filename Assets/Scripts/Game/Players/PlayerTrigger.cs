@@ -52,8 +52,22 @@ namespace MP.Game.Players
         [Server]
         private void RestartGame()
         {
+            //RpcMakeObjectNotActive();
             if (NetworkManager.singleton is NetworkRoomManagerExtended room)
                 room.RestartGame(_sceneData.RestartTimer);
+        }
+
+        [Command]
+        private void CmdDisablesPlayersObjects()
+        {
+            if (NetworkManager.singleton is NetworkRoomManagerExtended room)
+                room.DisabledPlayersObjects();
+        }
+
+        [ClientRpc]
+        private void RpcMakeObjectNotActive()
+        {
+            gameObject.SetActive(false);
         }
     }
 

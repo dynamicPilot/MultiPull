@@ -133,7 +133,7 @@ Transform:
   - {fileID: 1659501983126241946}
   - {fileID: 8651496201137465078}
   m_Father: {fileID: 260899745209546617}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &260899745183565598
 MonoBehaviour:
@@ -278,8 +278,9 @@ GameObject:
   - component: {fileID: 4740971809112611133}
   - component: {fileID: 5051573132919751334}
   - component: {fileID: 1770194041383565374}
+  - component: {fileID: 5597318933321718217}
   m_Layer: 0
-  m_Name: PlayerWithTrigger
+  m_Name: GamePlayerObject
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -298,7 +299,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 260899744854781298}
-  - {fileID: 4531558224140962673}
   - {fileID: 3805252679009761487}
   - {fileID: 260899745183565592}
   m_Father: {fileID: 0}
@@ -412,13 +412,13 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  _inputControls: {fileID: 3876209272685642981}
   _playerRotation: {fileID: 260899745209546621}
   _playerPullState: {fileID: 1479590366862974269}
+  _inputControls: {fileID: 5597318933321718217}
   _playerData: {fileID: 11400000, guid: 1701e678fe0945948b96cc0cf5cdd98d, type: 2}
   _minMoveDirectionValue: 0.1
   _pullWillContinueFor: 20
-  StartPosition: {x: 0, y: 0, z: 0}
+  _characterController: {fileID: 0}
 --- !u!114 &260899745209546621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -431,7 +431,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bebee2313900734da72d8a6a20fab6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerUI: {fileID: 3805252679009761487}
+  _playerUI: {fileID: 5051573132919751334}
   _smoothTime: 0.1
 --- !u!114 &602010612623665000
 MonoBehaviour:
@@ -553,6 +553,18 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   _cameraObject: {fileID: 260899745183565595}
+--- !u!114 &5597318933321718217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 260899745209546613}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fa108463f0d24b4b8459f8b9ed5266e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &260899745564346628
 GameObject:
   m_ObjectHideFlags: 0
@@ -898,50 +910,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!1 &2781983286821184030
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4531558224140962673}
-  - component: {fileID: 3876209272685642981}
-  m_Layer: 0
-  m_Name: InputControl
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4531558224140962673
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2781983286821184030}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 260899745209546617}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3876209272685642981
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2781983286821184030}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0fa108463f0d24b4b8459f8b9ed5266e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2894989553536265670
 GameObject:
   m_ObjectHideFlags: 3
@@ -1131,7 +1099,7 @@ RectTransform:
   m_Children:
   - {fileID: 5659022151928098559}
   m_Father: {fileID: 260899745209546617}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

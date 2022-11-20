@@ -1,4 +1,6 @@
+using Cinemachine;
 using Mirror;
+using MP.Common;
 using UnityEngine;
 
 
@@ -8,15 +10,11 @@ namespace MP.Game.Players
     {
         [SerializeField] private GameObject _cameraObject;
 
-        public override void OnStartLocalPlayer()
+        public override void OnStartAuthority()
         {
             _cameraObject.SetActive(true);
         }
 
-        public override void OnStopLocalPlayer()
-        {
-            _cameraObject.SetActive(false);
-        }
     }
 }
 

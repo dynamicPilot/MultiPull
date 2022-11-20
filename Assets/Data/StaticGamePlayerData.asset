@@ -17,3 +17,5 @@ MonoBehaviour:
   HitTime: 3
   Speed: 5
   PullDistance: 3
+  CameraPrefab: {fileID: 4742526209537826406, guid: b54fba55440411e4f88c25cb9759556a, type: 3}
+  PlayerPrefab: {fileID: 260899745209546613, guid: 22fd20252cc076542afc2ba062fe201d, type: 3}

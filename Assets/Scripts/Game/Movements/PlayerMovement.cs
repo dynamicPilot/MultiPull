@@ -7,48 +7,54 @@ using UnityEngine;
 
 namespace MP.Game.Movements
 {
-    [RequireComponent(typeof(NetworkTransform))]
     public class PlayerMovement : NetworkBehaviour
     {
-        [SerializeField] private InputControls _inputControls;
-        
         [SerializeField] private PlayerRotation _playerRotation;
         [SerializeField] private PlayerPullState _playerPullState;
+        [SerializeField] private InputControls _inputControls;
 
         [Header("Movement Parameters")]
         [SerializeField] private StaticGamePlayerData _playerData;
         [SerializeField] private float _minMoveDirectionValue = 0.1f;
         [SerializeField] private int _pullWillContinueFor = 50;
+        
+        CharacterController _characterController = null;        
 
-        [SyncVar]
-        [SerializeField] public Vector3 StartPosition;
-
-        CharacterController _characterController = null;
         bool _nextPull = false;
         bool _previousPull = false;
 
         float _angle;
         int _pullDelayCount = 0;
 
-        public override void OnStartLocalPlayer()
+        public override void OnStartAuthority()
         {
-            _inputControls.OnPullPerformed += NextMoveIsPull;
+            _inputControls.enabled = true;
             _characterController = gameObject.AddComponent<CharacterController>();
+
+            if (_inputControls != null) _inputControls.OnPullPerformed += NextMoveIsPull;
             _characterController.enabled = true;
         }
 
-        public override void OnStopLocalPlayer()
+        private void OnDisable()
         {
-            _inputControls.OnPullPerformed -= NextMoveIsPull;
-            _characterController.enabled = false;
-            
+            if (_inputControls != null) _inputControls.OnPullPerformed -= NextMoveIsPull;
+            _inputControls.enabled = false;
         }
 
         private void FixedUpdate()
         {
+            if (_characterController == null || !_characterController.enabled || _inputControls == null ||
+                _playerData == null || _playerRotation == null || _playerPullState == null)
+            {
+                return;
+            }
 
-            if (!isLocalPlayer || _characterController == null || !_characterController.enabled) return;
+            if (isClient) MakeMove();
+        }
 
+        [Client]
+        private void MakeMove()
+        {
             // check direction
             var checkResult = CheckDirection(_inputControls.GetMoveValue());
 
@@ -63,9 +69,9 @@ namespace MP.Game.Movements
             if (_previousPull && !_nextPull) PrevMoveIsPull();
 
             if (_nextPull) MoveIsPull();
-
         }
 
+        [Client]
         private Tuple<bool,Vector3> CheckDirection(Vector2 moveVector)
         {
             var direction = new Vector3(moveVector.x, 0f, moveVector.y).normalized;
@@ -75,6 +81,7 @@ namespace MP.Game.Movements
                 : new Tuple<bool, Vector3> (true, direction);
         }
 
+        [Client]
         private Vector3 GetDirection(float angle)
         {           
             var correctedDirection = (Quaternion.Euler(0f, angle, 0f) * Vector3.forward).normalized;
@@ -82,13 +89,16 @@ namespace MP.Game.Movements
             return (_nextPull) ? correctedDirection * _playerData.PullDistance :
                 (_characterController.isGrounded) ? correctedDirection * _playerData.Speed * Time.fixedDeltaTime
                 : new Vector3(correctedDirection.x * _playerData.Speed * Time.fixedDeltaTime,
-                -transform.position.y, correctedDirection.z * _playerData.Speed * Time.fixedDeltaTime);
+                -transform.position.y * 100f, correctedDirection.z * _playerData.Speed * Time.fixedDeltaTime);
         }
+
+        [Client]
         private void NextMoveIsPull()
         {
             _nextPull = true;
         }
 
+        [Client]
         private void MoveIsPull()
         {
             _nextPull = false;
@@ -96,7 +106,7 @@ namespace MP.Game.Movements
             _pullDelayCount = _pullWillContinueFor;
             _playerPullState.CmdInAPullValue(true);
         }
-
+        [Client]
         private void PrevMoveIsPull()
         {
             if (_pullDelayCount-- > 0) return;

@@ -2536,11 +2536,13 @@ MonoBehaviour:
   networkAddress: localhost
   maxConnections: 4
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 260899745209546613, guid: 22fd20252cc076542afc2ba062fe201d, type: 3}
+  playerPrefab: {fileID: 2421458806365702135, guid: 18bffafd0b5287d4ea90aa8601321192, type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 1
   spawnPrefabs:
   - {fileID: 7391428487960501973, guid: faaede11d2483a845806c90b5fc4ef32, type: 3}
+  - {fileID: 4597999780381705887, guid: 4121120d294287445985a95e0ffc92c4, type: 3}
+  - {fileID: 260899745209546613, guid: 22fd20252cc076542afc2ba062fe201d, type: 3}
   timeInterpolationGui: 0
   showRoomGUI: 0
   minPlayers: 1
@@ -2550,8 +2552,8 @@ MonoBehaviour:
   _allPlayersReady: 0
   roomSlots: []
   clientIndex: 0
-  ReturnToCanvas: {fileID: 7391428487960501973, guid: faaede11d2483a845806c90b5fc4ef32, type: 3}
-  _usedPositions: []
+  _returnToCanvasPrefab: {fileID: 7391428487960501973, guid: faaede11d2483a845806c90b5fc4ef32, type: 3}
+  _spawnSystemPrefab: {fileID: 4597999780381705887, guid: 4121120d294287445985a95e0ffc92c4, type: 3}
 --- !u!114 &2065843612
 MonoBehaviour:
   m_ObjectHideFlags: 0

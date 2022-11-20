@@ -9,6 +9,8 @@ TagManager:
   - PlayerTrigger
   - PlayerBody
   - GameUI
+  - SpawnSystem
+  - InputManager
   layers:
   - Default
   - TransparentFX

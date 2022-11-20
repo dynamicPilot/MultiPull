@@ -24,10 +24,6 @@ namespace MP.Game.Players
         public bool InRestart;
 
         private int _slotIndex;
-        private void Start()
-        {
-            DontDestroyOnLoad(this);
-        }
 
         private void SyncScore(int oldValue, int newValue)
         {
