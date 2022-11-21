@@ -1,24 +1,24 @@
 using Mirror;
 using MP.Common;
+using MP.Game.Players;
 using MP.Manager;
 using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace MP.Game.SpawnSystems
+namespace MP.Game.SpawnAndControlSystems
 {
+    /// <summary>
+    /// Controls players objects spawn in a game scene.
+    /// <para>SpawnPlayer on NetworkRoomManagerExtended event OnGameServerReady.</para>
+    /// </summary>
+    [RequireComponent(typeof(PlayersObjectsControlSystem))]
     public class SpawnSystem : NetworkBehaviour
     {
+        [SerializeField] private PlayersObjectsControlSystem _controlSystem;
         [SerializeField] private StaticGamePlayerData _playerData;
-        private List<Transform> _spawnPoints = new List<Transform>();
-        private List<GameObject> _spawnObjects = new List<GameObject>();
 
-        [Server]
-        public void AddSpawnPoints(Transform[] points)
-        {
-            _spawnPoints.Clear();
-            _spawnPoints.AddRange(points);
-        }
+        private List<Transform> _spawnPoints = new List<Transform>();
 
         public override void OnStartServer()
         {
@@ -32,6 +32,12 @@ namespace MP.Game.SpawnSystems
                 manager.OnGameServerReady -= SpawnPlayer;
         }
 
+        [Server]
+        public void AddSpawnPoints(Transform[] points)
+        {
+            _spawnPoints.Clear();
+            _spawnPoints.AddRange(points);
+        }
 
 
         [Server]
@@ -46,18 +52,10 @@ namespace MP.Game.SpawnSystems
             if (NetworkManager.singleton is NetworkRoomManagerExtended manager)
                 manager.OnGamePlayerObjectLoadedForPlayer(conn.identity.gameObject, playerInstance);
 
-            _spawnObjects.Add(playerInstance);
+            _controlSystem.AddPlayerObject(playerInstance.GetComponent<GamePlayerObject>());
+
             _spawnPoints.Remove(spawnPoint);
 
-        }
-
-        [Server]
-        public void DisablePlayers()
-        {
-            for (int i = 0; i < _spawnObjects.Count; i++)
-            {
-                _spawnObjects[i].SetActive(false);
-            }
         }
     }
 }

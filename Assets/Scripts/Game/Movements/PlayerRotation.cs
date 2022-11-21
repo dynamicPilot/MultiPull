@@ -4,10 +4,14 @@ using UnityEngine;
 
 namespace MP.Game.Movements
 {
+    /// <summary>
+    /// Component for calculation of a rotation angle using Camera.main.transform.
+    /// <para>Calls PlayerNameUI to correct UI rotation.</para>
+    /// </summary>
     [RequireComponent(typeof(PlayerNameUI))]
     public class PlayerRotation : MonoBehaviour
     {
-        [SerializeField] public PlayerNameUI _playerUI;
+        [SerializeField] private PlayerNameUI _playerUI;
         [SerializeField] private float _smoothTime = 0.1f;
 
         Transform _cameraTransform;

@@ -3,7 +3,12 @@ using MP.Game.Input.Interfaces;
 using UnityEngine;
 
 namespace MP.Game.Input
-{ 
+{
+    /// <summary>
+    /// User input for Controls.PalyerMap. 
+    /// <para>GetMoveValue() to get position delta.</para>
+    /// <para>OnPullPerformed event to observe Pull.</para>
+    /// </summary>
     public class InputControls : MonoBehaviour, IGetMoveValue, IPullPerformed
     {
         private Controls _controls;

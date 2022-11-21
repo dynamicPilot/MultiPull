@@ -7,6 +7,11 @@ using UnityEngine;
 
 namespace MP.Game.Movements
 {
+    /// <summary>
+    /// Component for calculation movements with InputControl, PlayerRotation and CharacterController.
+    /// <para>Calls PlayerPullState with CmdInAPullValue to change pull state.</para>
+    /// <para>Creates CharacterController on OnStartAuthority.</para>
+    /// </summary>
     public class PlayerMovement : NetworkBehaviour
     {
         [SerializeField] private PlayerRotation _playerRotation;
@@ -44,7 +49,7 @@ namespace MP.Game.Movements
         private void FixedUpdate()
         {
             if (_characterController == null || !_characterController.enabled || _inputControls == null ||
-                _playerData == null || _playerRotation == null || _playerPullState == null)
+                _playerData == null || _playerRotation == null)
             {
                 return;
             }
@@ -87,7 +92,9 @@ namespace MP.Game.Movements
             var correctedDirection = (Quaternion.Euler(0f, angle, 0f) * Vector3.forward).normalized;
 
             return (_nextPull) ? correctedDirection * _playerData.PullDistance :
+                // if grouded
                 (_characterController.isGrounded) ? correctedDirection * _playerData.Speed * Time.fixedDeltaTime
+                // else -> move to the ground
                 : new Vector3(correctedDirection.x * _playerData.Speed * Time.fixedDeltaTime,
                 -transform.position.y * 100f, correctedDirection.z * _playerData.Speed * Time.fixedDeltaTime);
         }
@@ -104,14 +111,14 @@ namespace MP.Game.Movements
             _nextPull = false;
             _previousPull = true;
             _pullDelayCount = _pullWillContinueFor;
-            _playerPullState.CmdInAPullValue(true);
+            if (_playerPullState!= null) _playerPullState.CmdInAPullValue(true);
         }
         [Client]
         private void PrevMoveIsPull()
         {
             if (_pullDelayCount-- > 0) return;
             _previousPull = false;
-            _playerPullState.CmdInAPullValue(false);
+            if (_playerPullState != null) _playerPullState.CmdInAPullValue(false);
         }
 
     }

@@ -7,6 +7,11 @@ using UnityEngine;
 
 namespace MP.Room.Players
 {
+    /// <summary>
+    /// This is a main component for Player in a Room.
+    /// <para>SyncVar: PlayerName.</para>
+    /// <para>Extends NetworkRoomPlayer.</para>
+    /// </summary>
     public class NetworkRoomPlayerExtended : NetworkRoomPlayer
     {
         [SerializeField] private RoomPlayerUI _playerUI;
@@ -26,16 +31,16 @@ namespace MP.Room.Players
             _playerUI.SetViewActiveState(false);           
         }
 
+        public override void ReadyStateChanged(bool oldReadyState, bool newReadyState)
+        {
+            if (!newReadyState) _playerUI.SetStartButtonState(false);
+        }
+
 
         private void SyncPlayerName(string oldValue, string newValue)
         {
             PlayerName = newValue;
             _playerUI.SetPlayerName(newValue);
-        }
-
-        public override void ReadyStateChanged(bool oldReadyState, bool newReadyState)
-        {
-            if (!newReadyState) _playerUI.SetStartButtonState(false);
         }
 
         [Command]
@@ -44,8 +49,7 @@ namespace MP.Room.Players
             PlayerName = newPlayerName;
         }
 
-
-        public string GetPlayerNameFromPlayerPrefs()
+        private string GetPlayerNameFromPlayerPrefs()
         {
             if (PlayerPrefs.HasKey(_sceneData.NameKey)) return PlayerPrefs.GetString(_sceneData.NameKey);
             return _sceneData.DefaultPlayerName;
@@ -56,7 +60,7 @@ namespace MP.Room.Players
             _playerUI.SetStartButtonState(true);            
         }
 
-
+        // used by Button Conponent
         public void StartGame()
         {
             NetworkRoomManagerExtended room = NetworkManager.singleton as NetworkRoomManagerExtended;

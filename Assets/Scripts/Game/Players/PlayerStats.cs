@@ -2,15 +2,22 @@ using Mirror;
 using MP.Common;
 using MP.Game.Players.UI;
 using MP.Game.UI;
-using MP.Manager;
 using UnityEngine;
 
 
 namespace MP.Game.Players
 {
+    /// <summary>
+    /// This is a script to store current player's score and name.
+    /// <para>SyncVar: Score, PlayerName.</para>
+    /// <para>Looking for PlayersStatsUI, EndGameUI with FindGameObjectWithTag("GameUI").</para>
+    /// </summary>
     public class PlayerStats : NetworkBehaviour
     {
+        [Header("Parameters")]
         [SerializeField] private StaticSceneData _sceneData;
+
+        [Header("UI Elements")]
         [SerializeField] private PlayerNameUI _playerNameUI;
         [SerializeField] private PlayersStatsUI _playerStatsUI;
 
@@ -20,10 +27,7 @@ namespace MP.Game.Players
         [SyncVar(hook = nameof(SyncName))]
         public string PlayerName;
 
-        [SyncVar(hook = nameof(SyncInRestart))]
-        public bool InRestart;
-
-        private int _slotIndex;
+        int _slotIndex;
 
         private void SyncScore(int oldValue, int newValue)
         {
@@ -44,12 +48,6 @@ namespace MP.Game.Players
         private void Winner()
         {
             _playerStatsUI.GetComponent<EndGameUI>().EndGameStart(PlayerName);
-        }
-
-
-        private void SyncInRestart(bool oldValue, bool newValue)
-        {
-            FindGameUI();
         }
 
         private void FindGameUI()

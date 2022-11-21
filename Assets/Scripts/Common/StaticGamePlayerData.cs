@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace MP.Common
 {
+    /// <summary>
+    /// ScriptableObject to store the game player parameters.
+    /// </summary>
     [CreateAssetMenu(menuName = "StaticData/StaticGamePlayerData", fileName = "StaticGamePlayerData", order = 2)]
     public class StaticGamePlayerData : ScriptableObject
     {
@@ -15,7 +18,6 @@ namespace MP.Common
         public float PullDistance = 3f;
 
         [Header("Local Player Components")]
-        public GameObject CameraPrefab;
         public GameObject PlayerPrefab;
     }
 }

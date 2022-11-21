@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace MP.Game.UI
 {
+    /// <summary>
+    /// UI component to display end game message for players in the scene.
+    /// </summary>
     public class EndGameUI : MonoBehaviour
     {
         [Header("UI Elements")]
@@ -13,7 +16,6 @@ namespace MP.Game.UI
 
         [Header("Parameters")]
         [SerializeField] private StaticSceneData _sceneData;
-
 
         private void OnValidate()
         {

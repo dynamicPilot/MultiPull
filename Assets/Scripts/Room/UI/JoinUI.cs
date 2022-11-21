@@ -7,6 +7,7 @@ namespace MP.Room.UI
 {
     public class JoinUI : MonoBehaviour
     {
+        [Header("UI Elements")]
         [SerializeField] private GameObject _joinPanel;
         [SerializeField] private GameObject _rolePanel;
         [SerializeField] private GameObject _errorPanel;
@@ -14,17 +15,13 @@ namespace MP.Room.UI
         private void Start()
         {
             if (NetworkManager.singleton is NetworkRoomManagerExtended room)
-            {
                 room.OnConnectionError += OpenErrorPanel;
-            }
         }
 
         private void OnDestroy()
         {
             if (NetworkManager.singleton is NetworkRoomManagerExtended room)
-            {
                 room.OnConnectionError -= OpenErrorPanel;
-            }
         }
 
         public void ActivateUI()

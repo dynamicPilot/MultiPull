@@ -1,11 +1,12 @@
-using Cinemachine;
 using Mirror;
-using MP.Common;
 using UnityEngine;
 
 
 namespace MP.Game.Players
 {
+    /// <summary>
+    /// This is a script to activate Camera in OnStartAuthority.
+    /// </summary>
     public class PlayerCamera : NetworkBehaviour
     {
         [SerializeField] private GameObject _cameraObject;

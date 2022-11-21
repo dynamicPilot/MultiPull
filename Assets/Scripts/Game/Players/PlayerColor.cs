@@ -4,6 +4,10 @@ using UnityEngine;
 
 namespace MP.Game.Players
 {
+    /// <summary>
+    /// Component to change and sync player's color.
+    /// <para>SyncVar:Color.</para>
+    /// </summary>
     public class PlayerColor : NetworkBehaviour
     {
         [SerializeField] private StaticGamePlayerData _playerData;
@@ -11,7 +15,8 @@ namespace MP.Game.Players
 
         [SyncVar(hook = nameof(SyncColor))]
         public Color Color;
-        private Material _material;
+
+        Material _material;
 
         private void OnDestroy()
         {

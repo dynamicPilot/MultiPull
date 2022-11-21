@@ -1,17 +1,19 @@
 using Mirror;
-using MP.Manager;
 using UnityEngine;
 using PlayerMovement = MP.Game.Movements.PlayerMovement;
-using Debug = UnityEngine.Debug;
 
 namespace MP.Game.Players 
 {
+    /// <summary>
+    /// This is a script to control Player's game object. Object will be destroyed on OnDisable.
+    /// </summary>
     public class GamePlayerObject : NetworkBehaviour
     {
-        [SerializeField] private PlayerStats _stats;
         [SerializeField] private PlayerMovement _movement;
-        [SerializeField] private PlayerTrigger _trigger;
-
+        private void OnDisable()
+        {
+            NetworkServer.Destroy(gameObject);
+        }
 
         [Server]
         public void DisablePlayerObject()
@@ -20,16 +22,23 @@ namespace MP.Game.Players
             RpcMakeObjectNotActive();
         }
 
-
         [ClientRpc]
         private void RpcMakeObjectNotActive()
         {
             gameObject.SetActive(false);
         }
 
-        private void OnDisable()
+        [Server]
+        public void BlockPlayerMovement()
         {
-            NetworkServer.Destroy(gameObject);
+            _movement.enabled = false;
+            RpcBlockPlayerMovement();
+        }
+
+        [ClientRpc]
+        private void RpcBlockPlayerMovement()
+        {
+            _movement.enabled = false;
         }
 
     }

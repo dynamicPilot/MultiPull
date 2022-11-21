@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace MP.Game.UI
 {
+    /// <summary>
+    /// UI component to display Players Score in the scene.
+    /// </summary>
     public class PlayersStatsUI : MonoBehaviour
     {
         [SerializeField] private StaticSceneData _sceneData;
@@ -18,7 +21,6 @@ namespace MP.Game.UI
 
         public int AddSlotForPlayer(string playerName)
         {
-
             PlayerStatsSlotUI slot = CreateSlot();
 
             int index = _slots.Count;
@@ -41,11 +43,6 @@ namespace MP.Game.UI
             if (!_slots.ContainsKey(index)) return false;
             _slots[index].UpdateValue(newValue);
             return true;
-        }
-
-        public void OnEndGameStart()
-        {
-            _slotsParent.gameObject.SetActive(false);
         }
         
         private PlayerStatsSlotUI CreateSlot()

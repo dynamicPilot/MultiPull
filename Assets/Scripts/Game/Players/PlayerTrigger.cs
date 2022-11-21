@@ -6,18 +6,19 @@ using UnityEngine;
 
 namespace MP.Game.Players
 {
+    /// <summary>
+    /// This is a script to detect Player's Collision with other Players, calls on server.
+    /// <para>Detects collision with OnTriggerEnter. 
+    /// Increments PlayerStats Score variable and calls RestartGame via NetworkRoomManagerExtended.</para>
+    /// </summary>
     public class PlayerTrigger : NetworkBehaviour
     {
         [SerializeField] private StaticSceneData _sceneData;
 
-        [SyncVar]
-        public bool IsRestarting = false;
-
         [ServerCallback]
         void OnTriggerEnter(Collider other)
         {
-
-            if ((other.gameObject.CompareTag("Player")  || other.gameObject.CompareTag("PlayerBody")) &&
+            if ((other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("PlayerBody")) &&
                 other.gameObject != gameObject)
             {
                 var selfPullState = gameObject.GetComponent<PlayerPullState>();
@@ -30,10 +31,9 @@ namespace MP.Game.Players
                     CanNotBePulledStateActivator(playerCanBePulledState);
             }
         }
+
         private void CanNotBePulledStateActivator(PlayerCanBePulledState player)
         {
-            if (IsRestarting) return;
-
             player.StartCanNotBePulledState();
 
             var selfStats = gameObject.GetComponent<PlayerStats>();
@@ -41,34 +41,15 @@ namespace MP.Game.Players
             if (selfStats != null)
             {
                 selfStats.Score++;
-                if (selfStats.Score == _sceneData.ScoreToWin)
-                {
-                    //selfStats.IsWinner = true;
-                    RestartGame();
-                }
+                if (selfStats.Score == _sceneData.ScoreToWin) RestartGame();
             }
         }
 
         [Server]
         private void RestartGame()
         {
-            //RpcMakeObjectNotActive();
             if (NetworkManager.singleton is NetworkRoomManagerExtended room)
                 room.RestartGame(_sceneData.RestartTimer);
         }
-
-        [Command]
-        private void CmdDisablesPlayersObjects()
-        {
-            if (NetworkManager.singleton is NetworkRoomManagerExtended room)
-                room.DisabledPlayersObjects();
-        }
-
-        [ClientRpc]
-        private void RpcMakeObjectNotActive()
-        {
-            gameObject.SetActive(false);
-        }
     }
-
 }

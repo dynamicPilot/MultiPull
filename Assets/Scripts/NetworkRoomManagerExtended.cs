@@ -1,12 +1,10 @@
 using Mirror;
 using MP.Common.Players;
-using MP.Game.Movements;
 using MP.Game.Players;
-using MP.Game.SpawnSystems;
+using MP.Game.SpawnAndControlSystems;
 using MP.Room.Players;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -17,12 +15,10 @@ namespace MP.Manager
         [SerializeField] private GameObject _returnToCanvasPrefab;
         [SerializeField] private GameObject _spawnSystemPrefab;
 
-        //public List<NetworkGamePlayer> GameSlots = new List<NetworkGamePlayer>();
-
         public event Action OnConnectionError;
         public event Action<NetworkConnection> OnGameServerReady;
-
-        SpawnSystem _spawnSystem;
+        public event Action OnRestartingStart;
+        public event Action OnRestartingEnd;
 
         bool _canStart;
         bool IsRestarting;
@@ -39,24 +35,6 @@ namespace MP.Manager
             _canStart = true;
         }
 
-        public override void OnRoomServerSceneChanged(string sceneName)
-        {
-            // spawn UI canvas for server only
-            if ((sceneName == GameplayScene || sceneName == RoomScene) && NetworkServer.active)
-            {
-                NetworkServer.Spawn(Instantiate(_returnToCanvasPrefab));
-            }  
-            
-            // spawn players object spawner
-            if (sceneName == GameplayScene && NetworkServer.active)
-            {
-                var spawnSystemObject = Instantiate(_spawnSystemPrefab);
-                _spawnSystem = spawnSystemObject.GetComponent<SpawnSystem>();
-                _spawnSystem.AddSpawnPoints(startPositions.ToArray());
-                NetworkServer.Spawn(spawnSystemObject);
-            }
-        }
-
         public override void OnServerReady(NetworkConnectionToClient conn)
         {
             base.OnServerReady(conn);
@@ -67,8 +45,26 @@ namespace MP.Manager
             }
         }
 
+        public override void OnRoomServerSceneChanged(string sceneName)
+        {
+            // spawn UI canvas for server only
+            if ((sceneName == GameplayScene || sceneName == RoomScene) && NetworkServer.active)
+                NetworkServer.Spawn(Instantiate(_returnToCanvasPrefab));
+
+            // spawn players object spawner
+            if (sceneName == GameplayScene && NetworkServer.active)
+            {
+                var spawnSystemObject = Instantiate(_spawnSystemPrefab);
+                var spawnSystem = spawnSystemObject.GetComponent<SpawnSystem>();
+                spawnSystem.AddSpawnPoints(startPositions.ToArray());
+
+                NetworkServer.Spawn(spawnSystemObject);
+            }
+        }
+
         public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer, GameObject gamePlayer)
         {
+            // transfer data from a room player to a game player
             var netGamePlayer = gamePlayer.GetComponent<NetworkGamePlayer>();
             var netRoomPlayer = roomPlayer.GetComponent<NetworkRoomPlayerExtended>();
             netGamePlayer.PlayerName = netRoomPlayer.PlayerName;
@@ -79,9 +75,16 @@ namespace MP.Manager
 
         public void OnGamePlayerObjectLoadedForPlayer(GameObject gamePlayer, GameObject playerObject)
         {
+            // transfer data from a game player to the current player's object
             var netGamePlayer = gamePlayer.GetComponent<NetworkGamePlayer>();
             var playerStats = playerObject.GetComponent<PlayerStats>();
             playerStats.PlayerName = netGamePlayer.PlayerName;
+        }
+
+        private void UpdateFirstPlayerWhenAllIsReady()
+        {
+            var extendedPlayer = roomSlots[0] as NetworkRoomPlayerExtended;
+            extendedPlayer.ActivateStartButton();
         }
 
         public void StartGame()
@@ -92,13 +95,7 @@ namespace MP.Manager
                 ServerChangeScene(GameplayScene);
             }
         }
-
-        private void UpdateFirstPlayerWhenAllIsReady()
-        {
-            var extendedPlayer = roomSlots[0] as NetworkRoomPlayerExtended;
-            extendedPlayer.ActivateStartButton();
-        }
-
+        
         public void HostStopServer()
         {
             if (IsRestarting) StopAllCoroutines();
@@ -122,12 +119,11 @@ namespace MP.Manager
 
         public void RestartGame(float timer)
         {
-            if (IsRestarting)
-            {
-                return;
-            }
+            if (IsRestarting) return;
 
             IsRestarting = true;
+            OnRestartingStart?.Invoke();
+
             StartCoroutine(CountTimeToRestart(timer));
         }
 
@@ -139,14 +135,10 @@ namespace MP.Manager
 
         private void OnRestartGame()
         {
-            DisabledPlayersObjects();
+            OnRestartingEnd?.Invoke();
             IsRestarting = false;
+
             ServerChangeScene(GameplayScene);
-        }
-        
-        public void DisabledPlayersObjects()
-        {
-            if (_spawnSystem != null) _spawnSystem.DisablePlayers();
         }
     }
 }

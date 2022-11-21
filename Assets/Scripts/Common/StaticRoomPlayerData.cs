@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace MP.Common
 {
+    /// <summary>
+    /// ScriptableObject to store the room player parameters.
+    /// </summary>
     [CreateAssetMenu(menuName = "StaticData/StaticRoomPlayerData", fileName = "StaticRoomPlayerData", order = 1)]
     public class StaticRoomPlayerData : ScriptableObject
     {

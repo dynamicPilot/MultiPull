@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace MP.Game.Players.UI
 {
+    /// <summary>
+    /// UI component to display Player name.
+    /// </summary>
     public class PlayerNameUI : MonoBehaviour
     {
         [SerializeField] private GameObject _canvas;

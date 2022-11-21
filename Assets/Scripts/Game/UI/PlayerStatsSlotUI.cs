@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 namespace MP.Game.UI
 {
+    /// <summary>
+    /// UI component to display a single player score and name. Slot component for PlayerStatsUI.
+    /// </summary>
     public class PlayerStatsSlotUI : MonoBehaviour
     {
         [SerializeField] private StaticSceneData _sceneData;

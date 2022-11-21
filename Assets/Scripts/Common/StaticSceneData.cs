@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace MP.Common
 {
+    /// <summary>
+    /// ScriptableObject to store the game parameters.
+    /// </summary>
     [CreateAssetMenu(menuName = "StaticData/StaticSceneData", fileName = "StaticSceneData", order = 0)]
     public class StaticSceneData : ScriptableObject
     {
@@ -10,7 +13,6 @@ namespace MP.Common
         public int ScoreToWin = 3;
         public int RestartTimer = 5;
         public string EndGameWinnerMessage = "{0} is a Winner!";
-        public string RestartCounterText = "Restart after: {0}";
 
         [Header("Player's Name Parameters")]
         public string NameKey = "PlayerName";

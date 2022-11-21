@@ -5,6 +5,10 @@ using UnityEngine;
 
 namespace MP.Game.Players
 {
+    /// <summary>
+    /// Component to store ans sync CanBePulled and performed logic for player's pulled state.
+    /// <para>SyncVar:CanBePulled.</para>
+    /// </summary>
     public class PlayerCanBePulledState : NetworkBehaviour
     {
         [SerializeField] private StaticGamePlayerData _playerData;
